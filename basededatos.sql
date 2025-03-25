@@ -105,3 +105,34 @@ ORDER BY
     total_reproducciones DESC;
     
 select * from Vista_Usuarios_Mas_Reproducciones;
+CREATE VIEW Vista_Canciones_Mejor_Calificadas AS
+SELECT 
+    c.titulo AS titulo_cancion,
+    COALESCE(AVG(cal.calificacion), 0) AS calificacion_promedio,
+    COUNT(cal.id_calificacion) AS cantidad_calificaciones
+FROM 
+    Canciones c
+LEFT JOIN 
+    Calificaciones cal ON c.id_cancion = cal.id_cancion
+GROUP BY 
+    c.id_cancion
+ORDER BY 
+    calificacion_promedio DESC;
+
+SELECT * FROM Vista_Canciones_Mejor_Calificadas;
+
+CREATE VIEW Vista_Playlists_Con_Cantidad AS
+SELECT 
+    p.nombre AS nombre_playlist,
+    u.nombre AS nombre_usuario,
+    COUNT(pc.id_cancion) AS total_canciones
+FROM 
+    Playlists p
+LEFT JOIN 
+    Playlist_Cancion pc ON p.id_playlist = pc.id_playlist
+LEFT JOIN 
+    Usuarios u ON p.id_usuario = u.id_usuario
+GROUP BY 
+    p.id_playlist
+ORDER BY 
+    total_canciones DESC;
