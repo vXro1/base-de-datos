@@ -136,3 +136,23 @@ GROUP BY
     p.id_playlist
 ORDER BY 
     total_canciones DESC;
+CREATE TABLE Registro_Actividad (
+    id_actividad INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
+    accion VARCHAR(255) NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE
+);
+INSERT INTO Registro_Actividad (id_usuario, accion) 
+VALUES (1, 'Calificó la canción "Yellow" con 5 estrellas');
+CREATE TABLE Suscripciones (
+    id_suscripcion INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT UNIQUE,
+    tipo ENUM('Gratis', 'Premium') DEFAULT 'Gratis',
+    fecha_inicio DATE DEFAULT CURRENT_DATE,
+    fecha_fin DATE,
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE
+);
+UPDATE Suscripciones 
+SET tipo = 'Premium', fecha_fin = DATE_ADD(CURDATE(), INTERVAL 1 YEAR)
+WHERE id_usuario = 1;
